@@ -1,0 +1,22 @@
+{
+  "name": "uatu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "fmt": "dprint fmt",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run compile && npm run cp:assets",
+    "pack": "npx spack",
+    "cp:assets": "cp -a ./src/assets/. ./dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/cli": "^0.1.55",
+    "@swc/core": "^1.2.151",
+    "chokidar": "^3.5.3",
+    "dprint": "^0.31.1",
+    "typescript": "^4.6.2"
+  }
+}
