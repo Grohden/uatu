@@ -6,8 +6,9 @@
   "scripts": {
     "fmt": "dprint fmt",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run compile && npm run cp:assets",
+    "build": "yarn compile && yarn cp:assets",
     "pack": "npx spack",
+    "serve": "npx http-serve ./dist",
     "cp:assets": "cp -a ./src/assets/. ./dist"
   },
   "author": "",
