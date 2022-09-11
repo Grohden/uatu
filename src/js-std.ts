@@ -10,3 +10,18 @@ export const each = <T>(list: T[], fn: (item: T, index: number) => void) => {
     i++;
   }
 };
+
+export function* batchConsumer<T>(batchSize: number, list: T[]) {
+  let currentSlice = 0;
+
+  while (true) {
+    const slice = list.slice(currentSlice * batchSize, (currentSlice + 1) * batchSize);
+    yield slice;
+
+    if (!slice.length) {
+      return;
+    }
+
+    currentSlice++;
+  }
+}
