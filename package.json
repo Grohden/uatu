@@ -7,7 +7,7 @@
     "fmt": "dprint fmt",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "yarn compile && yarn cp:assets",
-    "pack": "npx spack",
+    "compile": "npx spack",
     "serve": "npx http-serve ./dist",
     "cp:assets": "cp -a ./src/assets/. ./dist"
   },
