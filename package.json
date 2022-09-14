@@ -6,9 +6,10 @@
   "scripts": {
     "fmt": "dprint fmt",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node dev-server.js",
     "build": "yarn compile && yarn cp:assets",
+    "build:watch": "nodemon -e ts,html,css,obj --watch src/ --exec \"yarn build\"",
     "compile": "npx spack",
-    "serve": "npx http-serve ./dist",
     "cp:assets": "cp -a ./src/assets/. ./dist"
   },
   "author": "",
@@ -17,7 +18,11 @@
     "@swc/cli": "^0.1.55",
     "@swc/core": "^1.2.151",
     "chokidar": "^3.5.3",
+    "connect": "^3.7.0",
     "dprint": "^0.31.1",
+    "livereload": "^0.9.3",
+    "nodemon": "^2.0.19",
+    "serve-static": "^1.15.0",
     "typescript": "^4.6.2"
   }
 }
