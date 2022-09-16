@@ -9,4 +9,5 @@ export const rotateYMatrix = (
   o[1][1] = 1;
   o[2][0] = -Math.sin(theta);
   o[2][2] = Math.cos(theta);
+  o[3][3] = 1;
 };
