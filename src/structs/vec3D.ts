@@ -1,11 +1,13 @@
-export type Vec3D = [x: number, y: number, z: number, w: number];
+export type Vec3D = Float32Array;
 
-export const initVec3D = (x: number, y: number, z: number, w: number = 1): Vec3D => [
-  x,
-  y,
-  z,
-  w,
-];
+export const initVec3D = (x: number, y: number, z: number, w: number = 1): Vec3D =>
+  new Float32Array([
+    x,
+    y,
+    z,
+    w,
+  ]);
+
 export const crossProduct = (a: Vec3D, b: Vec3D): Vec3D =>
   initVec3D(
     a[1] * b[2] - a[2] * b[1],

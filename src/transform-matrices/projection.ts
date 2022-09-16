@@ -1,4 +1,5 @@
 import type { Mat4x4 } from "../structs";
+import { initMat4x4 } from "../structs";
 
 export const projMatrix = (
   {
@@ -15,10 +16,10 @@ export const projMatrix = (
 ): Mat4x4 => {
   const fFovRad = 1 / Math.tan(fFov * 0.5 / 180 * Math.PI);
 
-  return [
+  return initMat4x4(
     [fAspectRatio * fFovRad, 0, 0, 0],
     [0, fFovRad, 0, 0],
     [0, 0, fFar / (fFar - fNear), 1],
     [0, 0, (-fFar * fNear) / (fFar - fNear), 0],
-  ];
+  );
 };

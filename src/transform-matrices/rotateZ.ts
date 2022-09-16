@@ -1,10 +1,12 @@
 import type { Mat4x4 } from "../structs";
+import { initMat4x4 } from "../structs";
 
 export const rotateZMatrix = (
   theta: number,
-): Mat4x4 => [
-  [Math.cos(theta), Math.sin(theta), 0, 0],
-  [-Math.sin(theta), Math.cos(theta), 0, 0],
-  [0, 0, 1, 0],
-  [0, 0, 0, 1],
-];
+): Mat4x4 =>
+  initMat4x4(
+    [Math.cos(theta), Math.sin(theta), 0, 0],
+    [-Math.sin(theta), Math.cos(theta), 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  );
