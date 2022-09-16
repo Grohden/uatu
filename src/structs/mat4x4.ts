@@ -7,14 +7,12 @@ export type Mat4x4 = [
   row: [col: number, col: number, col: number, col: number],
 ];
 
-export const initMat4x4 = (): Mat4x4 => {
-  return [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ];
-};
+export const initMat4x4 = (): Mat4x4 => [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+];
 
 // FIXME: its better to do output style like C?
 export const multMatVec3D = (i: Vec3D, o: Vec3D, m: Mat4x4) => {
