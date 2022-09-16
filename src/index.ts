@@ -1,6 +1,6 @@
 import { copyTriangle, crossProduct, dotProduct, initTriangle, Triangle, Vec3D } from "./structs";
 
-import { canvasFill, makeLineDrawer, makeTriangleDrawer, makeTriangleFiller } from "./canvasDrawers";
+import { canvasFill, makeTriangleDrawer, makeTriangleFiller } from "./canvasDrawers";
 import { CanvasWrapper } from "./canvasWrapper";
 import { each } from "./js-std";
 import { loadToMesh } from "./obj-loader";
@@ -13,9 +13,8 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
 (async function init() {
   const manager = CanvasWrapper("cartesianCanvas");
   const fill = canvasFill(manager);
-  const drawLine = makeLineDrawer(manager);
   const fillTriangle = makeTriangleFiller(manager);
-  const drawTriangle = makeTriangleDrawer(drawLine);
+  const drawTriangle = makeTriangleDrawer(manager);
   const ticker = makeTicker();
   const vCamera: Vec3D = [0, 0, 0];
 
