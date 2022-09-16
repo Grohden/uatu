@@ -1,4 +1,3 @@
-import { each } from "./js-std";
 import { Mesh, Vec3D } from "./structs";
 
 export const loadToMesh = async (path: string): Promise<Mesh> => {
@@ -15,7 +14,7 @@ export const loadToMesh = async (path: string): Promise<Mesh> => {
   const vecPool: Vec3D[] = [];
   const mesh: Mesh = { tris: [] };
 
-  each(lines, (line) => {
+  for (const line of lines) {
     if (line.startsWith("v")) {
       const [, x, y, z] = line.split(" ");
 
@@ -32,7 +31,7 @@ export const loadToMesh = async (path: string): Promise<Mesh> => {
         },
       );
     }
-  });
+  }
 
   return mesh;
 };

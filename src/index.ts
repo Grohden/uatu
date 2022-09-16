@@ -2,13 +2,12 @@ import { copyTriangle, crossProduct, dotProduct, initTriangle, Triangle, Vec3D }
 
 import { canvasFill, makeTriangleDrawer, makeTriangleFiller } from "./canvasDrawers";
 import { CanvasWrapper } from "./canvasWrapper";
-import { each } from "./js-std";
 import { loadToMesh } from "./obj-loader";
 import { initMat4x4 } from "./structs";
 import { multMatVec3D } from "./structs/mat4x4";
 import { subVec } from "./structs/vec3D";
 import { makeTicker } from "./ticker";
-import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
+import { projMatrix, rotateMatrix } from "./transform-matrices";
 
 (async function init() {
   const manager = CanvasWrapper("cartesianCanvas");
@@ -46,7 +45,7 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
   //   ],
   // };
 
-  const meshCube = await loadToMesh(`models/VideoShip.obj?q=${new Date().getTime()}`);
+  const meshCube = await loadToMesh(`models/VideoShip.obj`);
 
   const matProj = initMat4x4();
   let fTheta = 0;
@@ -56,39 +55,28 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
   const y = 1;
   const z = 2;
 
-
   function renderLoop(elapsedTime: number) {
     // Clear canvas
     fill(0, 0, manager.width, manager.height, "black");
     fTheta = elapsedTime;
 
-    const matRotZ = initMat4x4();
-    const matRotX = initMat4x4();
-
-    rotateZMatrix(matRotX, fTheta);
-    rotateXMatrix(matRotZ, fTheta * 0.5);
-
+    const trianglesToRender = meshCube.tris;
+    const matRot = rotateMatrix(fTheta * 0.5, fTheta, 0);
     const vecTrianglesToRaster: Triangle[] = [];
 
     // Draw triangles
-    each(meshCube.tris, (tri) => {
-      // Rotate in z-axis
-      const triRotatedZ = initTriangle();
-      each(tri.p, (p, i) => {
-        multMatVec3D(p, triRotatedZ.p[i], matRotZ);
-      });
-
-      // Rotate in x-axis
-      const triRotatedZX = initTriangle();
-      each(triRotatedZ.p, (p, i) => {
-        multMatVec3D(p, triRotatedZX.p[i], matRotX);
-      });
+    for (const tri of trianglesToRender) {
+      // Rotate in all axis
+      const triRotated = initTriangle();
+      for (const i in tri.p) {
+        multMatVec3D(tri.p[i], triRotated.p[i], matRot);
+      }
 
       // offset into the screen
-      const triTranslated = copyTriangle(triRotatedZX);
-      each(triTranslated.p, (p) => {
+      const triTranslated = copyTriangle(triRotated);
+      for (const p of triTranslated.p) {
         p[z] += 8;
-      });
+      }
 
       // Use Cross-Product to get surface normal
       const line1 = subVec(triTranslated.p[1], triTranslated.p[0]);
@@ -111,20 +99,20 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
         const dp = dotProduct(normal, lightDirection);
 
         // project 3D to 2D
-        const triProjected = initTriangle(`hsl(0, 0%, ${dp * 100}%)`);
-        each(triTranslated.p, (p, i) => {
-          multMatVec3D(p, triProjected.p[i], matProj);
-        });
+        const triProjected = initTriangle(`hsl(281, 100%, ${Math.max(dp * 100, 30)}%)`);
+        for (const i in triTranslated.p) {
+          multMatVec3D(triTranslated.p[i], triProjected.p[i], matProj);
+        }
 
         projMatrix(matProj, {
           fAspectRatio: manager.aspectRatio,
         });
 
         // Scale into view
-        each(triProjected.p, (p) => {
+        for (const p of triProjected.p) {
           p[0] = (p[0] + 1) * (0.5 * manager.width);
           p[1] = (p[1] + 1) * (0.5 * manager.height);
-        });
+        }
 
         vecTrianglesToRaster.push(triProjected);
       }
@@ -136,7 +124,7 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
         return z2 - z1;
       });
 
-      each(painterSorted, (tri) => {
+      for (const tri of painterSorted) {
         fillTriangle(
           tri.p[0][x],
           tri.p[0][y],
@@ -156,8 +144,8 @@ import { projMatrix, rotateXMatrix, rotateZMatrix } from "./transform-matrices";
           tri.p[2][y],
           "white",
         );
-      });
-    });
+      }
+    }
 
     // Render pipeline
     window.requestAnimationFrame(() => renderLoop(ticker.tick()));
