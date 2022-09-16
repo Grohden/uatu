@@ -1,4 +1,7 @@
-export function CanvasWrapper(id: string) {
+export function CanvasWrapper(id: string, forceSize: {
+  height: number;
+  width: number;
+}) {
   const canvas = document.getElementById(id) as HTMLCanvasElement;
 
   if (!canvas) {
@@ -11,8 +14,10 @@ export function CanvasWrapper(id: string) {
   }
 
   // FIXME: make this more dynamic (?)
-  canvas.width = 780;
-  canvas.height = 780;
+  canvas.width = forceSize.width * 2;
+  canvas.height = forceSize.height * 2;
+  canvas.style.width = `${forceSize.height}px`;
+  canvas.style.height = `${forceSize.height}px`;
 
   return {
     context: ctx,

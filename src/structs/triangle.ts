@@ -1,16 +1,20 @@
-import { Vec3D } from "./vec3D";
+import type { Vec3D } from "./vec3D";
+import { initVec3D } from "./vec3D";
 
 export type Triangle = {
   p: [p1: Vec3D, p2: Vec3D, p3: Vec3D];
   color: string;
 };
 
-export const initTriangle = (color = "black"): Triangle => ({
+export const initTriangle = ({
+  color = "black",
+  p,
+}: Partial<Triangle>): Triangle => ({
   color,
-  p: [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
+  p: p || [
+    initVec3D(0, 0, 0),
+    initVec3D(0, 0, 0),
+    initVec3D(0, 0, 0),
   ],
 });
 

@@ -1,4 +1,4 @@
-import { Mat4x4 } from "../structs";
+import type { Mat4x4 } from "../structs";
 
 export const rotateMatrix = (xTheta: number, yTheta: number, zTheta: number): Mat4x4 => [
   [

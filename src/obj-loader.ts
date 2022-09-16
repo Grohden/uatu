@@ -1,4 +1,4 @@
-import { Mesh, Vec3D } from "./structs";
+import { initVec3D, Mesh, Vec3D } from "./structs";
 
 export const loadToMesh = async (path: string): Promise<Mesh> => {
   const res = await fetch(path, {
@@ -18,7 +18,7 @@ export const loadToMesh = async (path: string): Promise<Mesh> => {
     if (line.startsWith("v")) {
       const [, x, y, z] = line.split(" ");
 
-      vecPool.push([parseFloat(x), parseFloat(y), parseFloat(z)]);
+      vecPool.push(initVec3D(parseFloat(x), parseFloat(y), parseFloat(z)));
     }
 
     if (line.startsWith("f")) {

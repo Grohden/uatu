@@ -1,13 +1,10 @@
-import { Mat4x4 } from "../structs";
+import type { Mat4x4 } from "../structs";
 
 export const rotateXMatrix = (
-  o: Mat4x4,
   theta: number,
-) => {
-  o[0][0] = 1;
-  o[1][1] = Math.cos(theta);
-  o[1][2] = Math.sin(theta);
-  o[2][1] = -Math.sin(theta);
-  o[2][2] = Math.cos(theta);
-  o[3][3] = 1;
-};
+): Mat4x4 => [
+  [1, 0, 0, 0],
+  [0, Math.cos(theta), Math.sin(theta), 0],
+  [0, -Math.sin(theta), Math.cos(theta), 0],
+  [0, 0, 0, 1],
+];
