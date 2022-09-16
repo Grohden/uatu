@@ -108,17 +108,18 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
           p[y] *= 0.5 * manager.height;
         }
 
-        vecTrianglesToRaster.push(triProjected);
+        vecTrianglesToRaster.push({
+          tri: triProjected,
+          zMean: (triProjected.p[0][z] + triProjected.p[1][z] + triProjected.p[2][z]),
+        });
       }
 
       const painterSorted = vecTrianglesToRaster.sort((a, b) => {
-        const z1 = (a.p[0][z] + a.p[1][z] + a.p[2][z]) / 3;
-        const z2 = (b.p[0][z] + b.p[1][z] + b.p[2][z]) / 3;
-
-        return z2 - z1;
+        return b.zMean - a.zMean;
       });
 
-      for (const tri of painterSorted) {
+      for (const info of painterSorted) {
+        const tri = info.tri;
         fillTriangle(
           tri.p[0][x],
           tri.p[0][y],
