@@ -55,7 +55,10 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
         translateMatrix(0, 0, 10),
       ),
     );
-    const vecTrianglesToRaster: Triangle[] = [];
+    const vecTrianglesToRaster: {
+      tri: Triangle;
+      zMean: number;
+    }[] = [];
 
     // Draw triangles
     for (const tri of loadedMesh.tris) {
