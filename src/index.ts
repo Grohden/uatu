@@ -21,8 +21,8 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
 
 (async function init() {
   const manager = CanvasWrapper("cartesianCanvas", {
-    height: 780,
-    width: 780,
+    width: window.innerWidth,
+    height: window.innerHeight,
   });
   const fill = canvasFill(manager);
   const fillTriangle = makeTriangleFiller(manager);

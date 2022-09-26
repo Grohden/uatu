@@ -14,10 +14,8 @@ export function CanvasWrapper(id: string, forceSize: {
   }
 
   // FIXME: make this more dynamic (?)
-  canvas.width = forceSize.width * 2;
-  canvas.height = forceSize.height * 2;
-  canvas.style.width = `${forceSize.height}px`;
-  canvas.style.height = `${forceSize.height}px`;
+  canvas.width = forceSize.width;
+  canvas.height = forceSize.height;
 
   return {
     context: ctx,
