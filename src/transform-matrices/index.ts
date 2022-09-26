@@ -1,3 +1,4 @@
+export { pointAtMatrix } from "./pointAt";
 export { projMatrix } from "./projection";
 export { rotateMatrix } from "./rotate";
 export { rotateXMatrix } from "./rotateX";

@@ -49,3 +49,19 @@ export const matMultMat = (a: Mat4x4, b: Mat4x4): Mat4x4 => {
 
   return matrix;
 };
+
+// Only for rotation|translation matrices
+export const quickInverseMat = (m: Mat4x4) => {
+  const matrix = initMat4x4(
+    [m[0][0], m[1][0], m[2][0], 0],
+    [m[0][1], m[1][1], m[2][1], 0],
+    [m[0][2], m[1][2], m[2][2], 0],
+  );
+
+  matrix[3][0] = -(m[3][0] * matrix[0][0] + m[3][1] * matrix[1][0] + m[3][2] * matrix[2][0]);
+  matrix[3][1] = -(m[3][0] * matrix[0][1] + m[3][1] * matrix[1][1] + m[3][2] * matrix[2][1]);
+  matrix[3][2] = -(m[3][0] * matrix[0][2] + m[3][1] * matrix[1][2] + m[3][2] * matrix[2][2]);
+  matrix[3][3] = 1.0;
+
+  return matrix;
+};

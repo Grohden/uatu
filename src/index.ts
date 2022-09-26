@@ -6,8 +6,10 @@ import {
   initMatIdentity,
   initTriangle,
   initVec3D,
+  matMultMat,
   matMultVec3D,
   normalizeVec,
+  quickInverseMat,
   subVec,
 } from "./structs";
 import type { Triangle } from "./structs";
@@ -16,7 +18,8 @@ import { canvasFill, makeTriangleDrawer, makeTriangleFiller } from "./canvasDraw
 import { CanvasWrapper } from "./canvasWrapper";
 import { loadToMesh } from "./objLoader";
 import { makeTicker } from "./ticker";
-import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices";
+import { pointAtMatrix, projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices";
+import { userInputHandler } from "./userInput";
 
 (async function init() {
   const manager = CanvasWrapper("cartesianCanvas", {
@@ -26,8 +29,10 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
   const fill = canvasFill(manager);
   const fillTriangle = makeTriangleFiller(manager);
   const drawTriangle = makeTriangleDrawer(manager);
+  const inputs = userInputHandler();
   const ticker = makeTicker();
   const vCamera = initVec3D(0, 0, 0);
+  let vLookDir = initVec3D(0, 0, 0);
 
   const loadedMesh = await loadToMesh(`models/VideoShip.obj`);
   let fTheta = 0;
@@ -41,7 +46,7 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
   function renderLoop(elapsedTime: number) {
     // Clear canvas
     fill(0, 0, manager.width, manager.height, "black");
-    fTheta = elapsedTime;
+    // fTheta = elapsedTime;
 
     const matProj = projMatrix({
       fAspectRatio: manager.aspectRatio,
@@ -54,6 +59,27 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
         translateMatrix(0, 0, 10),
       ),
     );
+
+    vLookDir = initVec3D(0, 0, 1);
+    const vUp = initVec3D(0, 1, 0);
+    const vTarget = addVec(vCamera, vLookDir);
+
+    if (inputs.up) {
+      vCamera[y] += 0.1;
+    }
+    if (inputs.down) {
+      vCamera[y] -= 0.1;
+    }
+    if (inputs.left) {
+      vCamera[x] += 0.1;
+    }
+    if (inputs.right) {
+      vCamera[x] -= 0.1;
+    }
+
+    const matCamera = pointAtMatrix(vCamera, vTarget, vUp);
+    const matView = quickInverseMat(matCamera);
+
     const vecTrianglesToRaster: {
       tri: Triangle;
       zMean: number;
@@ -83,14 +109,23 @@ import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices"
         const lightDirection = normalizeVec(initVec3D(0, 1, -1));
         const dp = dotProduct(normal, lightDirection);
 
+        // World to view space
+        const triViewed = initTriangle({
+          p: [
+            matMultVec3D(matView, triTransformed.p[x]),
+            matMultVec3D(matView, triTransformed.p[y]),
+            matMultVec3D(matView, triTransformed.p[z]),
+          ],
+        });
+
         const triProjected = initTriangle({
           // choose color based on light
           color: `hsl(281, 100%, ${Math.max(dp * 100, 10)}%)`,
           // project 3D -> 2D
           p: [
-            matMultVec3D(matProj, triTransformed.p[x]),
-            matMultVec3D(matProj, triTransformed.p[y]),
-            matMultVec3D(matProj, triTransformed.p[z]),
+            matMultVec3D(matProj, triViewed.p[x]),
+            matMultVec3D(matProj, triViewed.p[y]),
+            matMultVec3D(matProj, triViewed.p[z]),
           ],
         });
 

@@ -24,6 +24,13 @@ export const divVec = (a: Vec3D, k: number) =>
     a[2] / k,
   );
 
+export const multVec = (a: Vec3D, k: number) =>
+  initVec3D(
+    a[0] * k,
+    a[1] * k,
+    a[2] * k,
+  );
+
 export const addVec = (a: Vec3D, b: Vec3D) =>
   initVec3D(
     a[0] + b[0],
