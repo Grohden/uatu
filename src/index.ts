@@ -14,8 +14,7 @@ import type { Triangle } from "./structs";
 
 import { canvasFill, makeTriangleDrawer, makeTriangleFiller } from "./canvasDrawers";
 import { CanvasWrapper } from "./canvasWrapper";
-import { loadToMesh } from "./obj-loader";
-import { matMultMat } from "./structs/mat4x4";
+import { loadToMesh } from "./objLoader";
 import { makeTicker } from "./ticker";
 import { projMatrix, rotateMatrix, translateMatrix } from "./transform-matrices";
 
